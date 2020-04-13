@@ -1,0 +1,21 @@
+{
+    "name": "Plex Sync",
+    "description" : "Plex Sync",
+    "version": "1.0",
+    "manifest_version": 2,
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+      },
+      "permissions": ["activeTab", "declarativeContent", "storage"],
+    "page_action": {
+        "default_popup": "popup.html",
+        "default_icon": "plex-32.png"
+      },
+    "content_scripts": [
+      {
+        "matches": ["https://app.plex.tv/desktop*"],
+        "js": ["contentScript.js"]
+      }
+    ]
+  }

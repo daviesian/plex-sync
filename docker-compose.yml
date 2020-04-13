@@ -1,0 +1,16 @@
+version: "2"
+services:
+    plex-sync:
+        image: plex-sync
+        build:
+            context: .
+        container_name: plex-sync
+        user: 999:999
+        volumes:
+            - ./server.py:/server.py
+        command: ["python", "-u", "/server.py"]
+
+networks:
+    default:
+        external:
+            name: main

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+
+      body {
+        width: 300px;
+      }
+
+      input {
+        display: block;
+      }
+      button {
+        height: 30px;
+        display: block;
+      }
+
+      .error {
+        background: #fdd;
+      }
+
+      ul {
+        padding: 0;
+      }
+
+      ul#messages li {
+        font-family: monospace;
+        list-style-type: none;
+      }
+
+      #loaded {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="notLoaded" class="error">Plex not connected - please refresh</div>
+    <div id="loaded">
+      <div id="params">
+        <input type="text" id="host" placeholder="Plex-Sync Host"/>
+        <input type="text" id="room" placeholder="Room"/>
+        <input type="text" id="name" placeholder="Your name"/>
+      </div>
+
+      <button id="connect">Connect</button>
+      <button id="disconnect">Disconnect</button>
+
+      <hr/>
+
+      <h3 id="connected">Connected to room '<span class="roomName"></span>'</h3>
+
+      <div id="roomStatus">
+        <h3>Room Members</h3>
+        <ul id="roomMembers"></ul>
+      </div>
+
+      <hr/>
+      <button id="endPlayback">End all playback</button>
+
+      <hr/>
+      <ul id="messages">
+      </ul>
+    </div>
+
+    <script src="lib/jquery-3.5.0.min.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
