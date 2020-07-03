@@ -6,9 +6,13 @@ let store = document.querySelectorAll('.background-container')[0]._reactRootCont
 
 //store.subscribe(()=> window.postMessage(JSON.stringify({state: store.getState()})));
 
+window.actions = [];
+
 let originalDispatch = store.dispatch;
 store.dispatch = action => {
-    window.postMessage(JSON.stringify({action: action}));
+    window.postMessage(JSON.stringify({action: action, idx: actions.length}));
+    ##actions.push(JSON.parse(JSON.stringify(action)));
+
     return originalDispatch(action);
 };
 
@@ -37,6 +41,7 @@ let sendActionTypes = [
     'ui/player/playerMedia/seek',
     'ui/player/playerLifecycle/startPlayback',
     'ui/player/playerLifecycle/endPlayback',
+    'metadata/redispatchLegacyMetadataAction'
 ];
 
 
@@ -69,6 +74,16 @@ port.onMessage.addListener(function(msg) {
       window.postMessage(JSON.stringify({dispatch: action}));
       if (ws) {
           ws.send(JSON.stringify({action: action}));
+      }
+  }
+  if (msg.resetPlayback) {
+      let action1 = {type:"ui/player/playerMedia/togglePlayPause", payload:{playerType: "audioVideo", shouldPause: true}};
+      let action2 = {type:"ui/player/playerMedia/seek", payload:{playerType: "audioVideo", positionSeconds: 0}};
+      window.postMessage(JSON.stringify({dispatch: action1}));
+      window.postMessage(JSON.stringify({dispatch: action2}));
+      if (ws) {
+          ws.send(JSON.stringify({action: action1}));
+          ws.send(JSON.stringify({action: action2}));
       }
   }
 });
@@ -134,6 +149,7 @@ window.addEventListener("hashchange", e => {
     }
 });
 
+
 window.addEventListener("message", e => {
     let msg = null
     try {
@@ -150,8 +166,9 @@ window.addEventListener("message", e => {
     } else if (msg.action) {
         if (excludeActionTypes.indexOf(msg.action.type) > -1)
             return
+          
 
-        console.warn("Action:", msg.action);
+        console.warn("Action:", msg.idx, msg.action);
 
         if (sendActionTypes.indexOf(msg.action.type) > -1 && ws) {
             console.warn("Sending action:", msg.action);

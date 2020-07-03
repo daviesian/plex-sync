@@ -15,6 +15,7 @@ let connected = $("#connected");
 let roomStatus = $("#roomStatus");
 let members = $("#roomMembers");
 
+let resetPlayback = $("#resetPlayback")
 let endPlayback = $("#endPlayback")
 
 let messages = $("#messages");
@@ -28,12 +29,14 @@ let updateStatus = function(status) {
     disconnect.show();
     params.hide();
     endPlayback.show();
+    resetPlayback.show();
   } else {
     connect.show();
     connected.hide();
     disconnect.hide();
     params.show();
     endPlayback.hide();
+    resetPlayback.hide();
   }
 
   if (status.pageLoaded) {
@@ -114,6 +117,12 @@ endPlayback.on("click", function() {
   port.postMessage({
     endPlayback: true,
   });
+});
+
+resetPlayback.on("click", function() {
+  port.postMessage({
+    resetPlayback: true,
+  })
 });
 
 port.postMessage({getParams: true, getStatus: true});
