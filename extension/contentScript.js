@@ -11,7 +11,7 @@ window.actions = [];
 let originalDispatch = store.dispatch;
 store.dispatch = action => {
     window.postMessage(JSON.stringify({action: action, idx: actions.length}));
-    ##actions.push(JSON.parse(JSON.stringify(action)));
+    //actions.push(JSON.parse(JSON.stringify(action)));
 
     return originalDispatch(action);
 };
